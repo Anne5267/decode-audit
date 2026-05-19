@@ -1,5 +1,7 @@
 # Decode Audit
 
+![CI](https://github.com/Anne5267/decode-audit/actions/workflows/ci.yml/badge.svg)
+
 **AI quality management and EU AI Act compliance tracking — in production at [audit.decodeai.dk](https://audit.decodeai.dk)**
 
 A platform for organizations running AI systems in production. Tracks test cases, incidents, compliance requirements, and maintains an immutable audit trail of all changes — built around EU AI Act obligations for high-risk AI systems.
