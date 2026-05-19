@@ -1,49 +1,54 @@
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --bg:        #0f0d0c;
+  --surface:   #1a1614;
+  --border:    #2a2420;
+  --text:      #e8e0d8;
+  --muted:     #a09890;
+  --accent:    #c8a878;
+
+  /* severity */
+  --sev1-bg: #1a0808; --sev1-border: #3a1010; --sev1-text: #e05050;
+  --sev2-bg: #1a1008; --sev2-border: #3a2010; --sev2-text: #c87848;
+  --sev3-bg: #1a1608; --sev3-border: #3a3010; --sev3-text: #c8a878;
+  --sev4-bg: #0e1a0e; --sev4-border: #1a3010; --sev4-text: #7a9a60;
+  --sev5-bg: #0e1018; --sev5-border: #1a2030; --sev5-text: #6a8aaa;
+
+  /* status */
+  --open:          #c8a878;
+  --investigating: #c87848;
+  --resolved:      #7a9a60;
+  --wont_fix:      #5a4a40;
+  --passed:        #7a9a60;
+  --failed:        #e05050;
+  --pending:       #5a4a40;
+  --flaky:         #c87848;
+  --met:           #7a9a60;
+  --not_met:       #e05050;
+  --partial:       #c87848;
+  --na:            #5a4a40;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-html {
-  height: 100%;
-}
-
-html,
-body {
-  max-width: 100vw;
-  overflow-x: hidden;
-}
+html { height: 100%; }
 
 body {
   min-height: 100%;
-  display: flex;
-  flex-direction: column;
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  font-family: "Inter", ui-sans-serif, system-ui, sans-serif;
+  font-size: 14px;
+  line-height: 1.6;
   -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
 }
 
-* {
-  box-sizing: border-box;
-  padding: 0;
-  margin: 0;
-}
+a { color: inherit; text-decoration: none; }
+a:hover { color: var(--accent); }
 
-a {
+button {
+  cursor: pointer;
+  border: none;
+  background: none;
+  font: inherit;
   color: inherit;
-  text-decoration: none;
-}
-
-@media (prefers-color-scheme: dark) {
-  html {
-    color-scheme: dark;
-  }
 }
