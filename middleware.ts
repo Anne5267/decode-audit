@@ -1,11 +1,12 @@
-// ⚠️ DEPRECATED 2026-05-22 — Next.js ignorerer denne fil (middleware skal hedde middleware.ts)
-// Erstattet af middleware.ts i samme mappe. Bevar som reference.
+// middleware.ts — oprettet 2026-05-22 natsession
+// Erstatter proxy.ts (som Next.js ikke registrerer — middleware SKAL hedde middleware.ts)
+
 import { NextRequest, NextResponse } from "next/server";
 
 const PASSWORD = process.env.TRACKER_PASSWORD ?? "anne";
 const COOKIE = "tracker_auth";
 
-export function proxy(req: NextRequest) {
+export function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
 
   // API og Next.js internals — lad passere (server components kalder disse selv)
