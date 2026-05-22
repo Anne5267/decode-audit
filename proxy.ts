@@ -1,5 +1,3 @@
-// ⚠️ DEPRECATED 2026-05-22 — Next.js ignorerer denne fil (middleware skal hedde middleware.ts)
-// Erstattet af middleware.ts i samme mappe. Bevar som reference.
 import { NextRequest, NextResponse } from "next/server";
 
 const PASSWORD = process.env.TRACKER_PASSWORD ?? "anne";
