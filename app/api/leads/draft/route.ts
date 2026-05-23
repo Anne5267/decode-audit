@@ -2,9 +2,8 @@
 // Version 1.0 — 2026-05-23
 
 import { NextRequest, NextResponse } from "next/server";
-import Anthropic from "@anthropic-ai/sdk";
 
-const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
+const ANTHROPIC_KEY = process.env.ANTHROPIC_API_KEY!;
 
 const SOURCE_CONTEXT: Record<string, string> = {
   "ai-risikotest":  "fuldførte Decode AI Risikotest (EU AI Act risikoscreening)",
@@ -60,13 +59,22 @@ Format:
 
 Skriv KUN selve mailen. Ingen forklaring. Ingen metadata.`;
 
-    const msg = await client.messages.create({
-      model:      "claude-sonnet-4-6",
-      max_tokens: 600,
-      messages:   [{ role: "user", content: prompt }],
+    const res2 = await fetch("https://api.anthropic.com/v1/messages", {
+      method: "POST",
+      headers: {
+        "x-api-key":         ANTHROPIC_KEY,
+        "anthropic-version": "2023-06-01",
+        "content-type":      "application/json",
+      },
+      body: JSON.stringify({
+        model:      "claude-sonnet-4-6",
+        max_tokens: 600,
+        messages:   [{ role: "user", content: prompt }],
+      }),
     });
-
-    const text = msg.content[0]?.type === "text" ? msg.content[0].text.trim() : "";
+    if (!res2.ok) throw new Error(`Anthropic ${res2.status}: ${await res2.text()}`);
+    const data2 = await res2.json();
+    const text = (data2.content?.[0]?.text ?? "").trim();
     if (!text) return NextResponse.json({ error: "Ingen tekst genereret" }, { status: 500 });
 
     return NextResponse.json({ draft: text });
