@@ -72,6 +72,11 @@ export default function LandingPage() {
           </span>
         </div>
         <div style={{ display: "flex", gap: "1rem", alignItems: "center" }}>
+          <a href="/demo" style={{
+            color: "#c8a878", fontSize: "0.8rem", textDecoration: "none",
+          }}>
+            Se demo →
+          </a>
           <a href="mailto:anne@decodeai.dk?subject=Decode Audit — forespørgsel" style={{
             color: "#a09890", fontSize: "0.8rem", textDecoration: "none",
           }}>
@@ -256,19 +261,33 @@ export default function LandingPage() {
           En gratis snak afklarer om Decode Audit passer til jer —
           hvad I har, hvad I mangler, og hvad der haster mest.
         </p>
-        <a
-          href="mailto:anne@decodeai.dk?subject=Decode Audit — forespørgsel&body=Hej Anne,%0A%0AJeg er interesseret i at høre mere om Decode Audit.%0A%0AVores AI-systemer / situation:%0A%0A"
-          style={{
-            display: "inline-block",
-            background: "#c8a878", color: "#0f0d0c",
-            padding: "0.9rem 2.5rem", borderRadius: 12,
-            textDecoration: "none", fontSize: "1rem",
-            fontWeight: 600, letterSpacing: "0.02em",
-          }}
-        >
-          Skriv til Anne →
-        </a>
-        <p style={{ color: "#3a3228", fontSize: "0.72rem", marginTop: "1rem" }}>
+        <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap", marginBottom: "1rem" }}>
+          <a
+            href="/demo"
+            style={{
+              display: "inline-block",
+              background: "#1a1614", color: "#c8a878",
+              padding: "0.9rem 2rem", borderRadius: 12,
+              textDecoration: "none", fontSize: "0.95rem",
+              fontWeight: 500, border: "1px solid #2a2418",
+            }}
+          >
+            Se demo →
+          </a>
+          <a
+            href="mailto:anne@decodeai.dk?subject=Decode Audit — forespørgsel&body=Hej Anne,%0A%0AJeg er interesseret i at høre mere om Decode Audit.%0A%0AVores AI-systemer / situation:%0A%0A"
+            style={{
+              display: "inline-block",
+              background: "#c8a878", color: "#0f0d0c",
+              padding: "0.9rem 2rem", borderRadius: 12,
+              textDecoration: "none", fontSize: "0.95rem",
+              fontWeight: 600, letterSpacing: "0.02em",
+            }}
+          >
+            Skriv til Anne →
+          </a>
+        </div>
+        <p style={{ color: "#3a3228", fontSize: "0.72rem" }}>
           anne@decodeai.dk · Svar inden for 24 timer
         </p>
       </section>
