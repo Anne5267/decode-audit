@@ -11,8 +11,8 @@ export function proxy(req: NextRequest) {
     return NextResponse.next();
   }
 
-  // Login-siden og landing-siden — lad passere (ingen auth krævet)
-  if (pathname === "/login" || pathname === "/landing") return NextResponse.next();
+  // Offentlige sider — ingen auth krævet
+  if (pathname === "/login" || pathname === "/landing" || pathname === "/demo") return NextResponse.next();
 
   // Alt andet: kræver gyldig session cookie
   const cookie = req.cookies.get(COOKIE)?.value;
