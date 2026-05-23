@@ -35,7 +35,7 @@ export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
 
-    const { name, email, score, source, category } = body;
+    const { name, email, score, source, category, notes } = body;
 
     if (!email || !email.includes("@")) {
       return NextResponse.json({ error: "Ugyldig email" }, { status: 400, headers: CORS });
@@ -48,14 +48,16 @@ export async function POST(req: NextRequest) {
       score: typeof score === "number" ? score : null,
       source: source || "ai-risikotest",
       category: category || null,
+      notes: notes?.trim() || null,
     });
 
     // Telegram-notifikation til Anne
     if (TELEGRAM_TOKEN && TELEGRAM_CHAT_ID) {
-      const scoreLabel = score !== undefined ? `Score: ${score}/100` : "";
+      const scoreLabel = score !== undefined && score !== null ? `Score: ${score}/100` : "";
       const catLabel = category ? `(${category})` : "";
       const nameLabel = name ? ` · ${name}` : "";
-      const text = `🎯 Ny lead fra ${source || "ai-risikotest"}\n${email}${nameLabel}\n${scoreLabel} ${catLabel}`.trim();
+      const notesLabel = notes ? `\n${notes}` : "";
+      const text = `🎯 Ny lead fra ${source || "ai-risikotest"}\n${email}${nameLabel}\n${scoreLabel} ${catLabel}${notesLabel}`.trim();
 
       await fetch(`https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage`, {
         method: "POST",

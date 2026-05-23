@@ -128,6 +128,12 @@ export default async function LeadsPage() {
                     <span style={{ fontSize: 11, color: "var(--muted)", textTransform: "capitalize" }}>
                       {lead.source}
                     </span>
+                    {lead.notes && (
+                      <>
+                        <span style={{ color: "var(--border)" }}>·</span>
+                        <span style={{ fontSize: 11, color: "var(--muted)" }}>{lead.notes}</span>
+                      </>
+                    )}
                   </div>
                 </div>
 
