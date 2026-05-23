@@ -5,6 +5,7 @@
 import { dbGet } from "@/app/lib/db";
 import { notFound } from "next/navigation";
 import PrintButton from "./PrintButton";
+import SendReportButton from "./SendReportButton";
 
 const RISK_DA: Record<string, string> = {
   minimal:      "Minimal",
@@ -147,6 +148,7 @@ export default async function ReportPage({ params }: { params: Promise<{ id: str
           borderRadius: 6, padding: "8px 14px",
           fontSize: 13, color: "#555", textDecoration: "none",
         }}>← Tilbage</a>
+        <SendReportButton systemId={system.id} />
         <PrintButton />
       </div>
 
