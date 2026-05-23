@@ -8,6 +8,8 @@ const NAV = [
   { href: "/incidents", label: "Incidents" },
   { href: "/test-cases", label: "Tests" },
   { href: "/compliance", label: "Compliance" },
+  { href: "/compliance/overview", label: "EU AI Act" },
+  { href: "/leads", label: "Leads" },
   { href: "/audit-log", label: "Audit Log" },
 ];
 

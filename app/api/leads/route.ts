@@ -1,8 +1,20 @@
 // app/api/leads/route.ts — Lead capture fra AI Risikotest og andre lead-gen sider
-// Version 1.0 — 2026-05-23
+// Version 1.1 — 2026-05-23 — GET returnerer fuld liste til intern brug
 
 import { NextRequest, NextResponse } from "next/server";
-import { dbPost } from "@/app/lib/db";
+import { dbGet, dbPost } from "@/app/lib/db";
+
+interface Lead {
+  id: string;
+  created_at: string;
+  name: string | null;
+  email: string;
+  score: number | null;
+  source: string;
+  category: string | null;
+  contacted: boolean;
+  notes: string | null;
+}
 
 const TELEGRAM_TOKEN = process.env.TELEGRAM_BOT_TOKEN;
 const TELEGRAM_CHAT_ID = process.env.TELEGRAM_CHAT_ID;
@@ -59,17 +71,34 @@ export async function POST(req: NextRequest) {
   }
 }
 
-// GET /api/leads — simpel tæller (public — viser kun antal, ikke emails)
-export async function GET() {
+// GET /api/leads — returnerer alle leads sorteret nyeste først
+// Bruges af /leads server-component internt.
+// CORS headers tillader public count-check fra risikotest-siden (bare url/?count=1).
+export async function GET(req: NextRequest) {
   try {
-    const { dbGet } = await import("@/app/lib/db");
-    const rows = await dbGet<{ count: string }[]>(
-      "/decode_leads?select=count&count=exact&head=true"
+    const countOnly = req.nextUrl.searchParams.get("count") === "1";
+    if (countOnly) {
+      const all = await dbGet<{ id: string }[]>("/decode_leads?select=id");
+      return NextResponse.json({ count: Array.isArray(all) ? all.length : 0 }, { headers: CORS });
+    }
+    const leads = await dbGet<Lead[]>(
+      "/decode_leads?select=*&order=created_at.desc&limit=200"
     );
-    // Supabase returnerer count i Content-Range header via head=true, men vi kan bare tælle
-    const all = await dbGet<{ id: string }[]>("/decode_leads?select=id");
-    return NextResponse.json({ count: Array.isArray(all) ? all.length : 0 }, { headers: CORS });
+    return NextResponse.json(Array.isArray(leads) ? leads : [], { headers: CORS });
   } catch {
-    return NextResponse.json({ count: 0 }, { headers: CORS });
+    return NextResponse.json([], { headers: CORS });
+  }
+}
+
+// PATCH /api/leads — opdater contacted-status
+export async function PATCH(req: NextRequest) {
+  try {
+    const { id, contacted } = await req.json() as { id: string; contacted: boolean };
+    if (!id) return NextResponse.json({ error: "id mangler" }, { status: 400 });
+    const { dbPatch } = await import("@/app/lib/db");
+    await dbPatch(`/decode_leads?id=eq.${id}`, { contacted });
+    return NextResponse.json({ ok: true });
+  } catch (err) {
+    return NextResponse.json({ error: String(err) }, { status: 500 });
   }
 }
