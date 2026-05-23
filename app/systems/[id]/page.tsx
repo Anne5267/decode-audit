@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { STATUS_DA, CATEGORY_DA, SEV_LABEL } from "@/app/lib/labels";
+import ImportEuAiActButton from "@/app/components/ImportEuAiActButton";
 
 import { baseUrl } from "@/app/lib/url";
 const BASE = baseUrl();
@@ -58,6 +59,9 @@ export default async function SystemDetailPage({ params }: { params: Promise<{ i
               {STATUS_DA[system.status] ?? system.status}
             </span>
           )}
+          <Link href={`/systems/${id}/report`} style={{ marginLeft: "auto", fontSize: 12, color: "var(--accent)", border: "1px solid var(--accent)", borderRadius: 6, padding: "4px 12px" }}>
+            ↗ Rapport
+          </Link>
         </div>
         {system.description && <p style={{ color: "var(--muted)", marginTop: 6 }}>{system.description}</p>}
         <div style={{ display: "flex", gap: 16, marginTop: 8, fontSize: 13, color: "var(--muted)" }}>
@@ -156,7 +160,14 @@ export default async function SystemDetailPage({ params }: { params: Promise<{ i
         count={system.compliance_requirements.length}
         addHref={`/compliance/new?system_id=${id}`}
         addLabel="+ Tilføj krav"
-        empty="Ingen compliance krav defineret."
+        exportHref={`/compliance/export/${id}`}
+        importButton={<ImportEuAiActButton systemId={system.id} />}
+        empty={
+          <div style={{ padding: 24, textAlign: "center" }}>
+            <div style={{ color: "var(--muted)", fontSize: 13, marginBottom: 12 }}>Ingen compliance krav defineret.</div>
+            <ImportEuAiActButton systemId={system.id} />
+          </div>
+        }
       >
         <table style={{ width: "100%", borderCollapse: "collapse" }}>
           <thead>
@@ -189,18 +200,26 @@ export default async function SystemDetailPage({ params }: { params: Promise<{ i
   );
 }
 
-function Section({ title, count, addHref, addLabel, empty, children }: {
-  title: string; count: number; addHref: string; addLabel: string; empty: string; children: React.ReactNode;
+function Section({ title, count, addHref, addLabel, empty, children, exportHref, importButton }: {
+  title: string; count: number; addHref: string; addLabel: string;
+  empty: string | React.ReactNode; children: React.ReactNode;
+  exportHref?: string; importButton?: React.ReactNode;
 }) {
   return (
     <section style={{ marginBottom: 32 }}>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10 }}>
         <h2 style={{ fontSize: 15, fontWeight: 600 }}>{title} <span style={{ color: "var(--muted)", fontWeight: 400, fontSize: 13 }}>({count})</span></h2>
-        <Link href={addHref} style={{ color: "var(--accent)", fontSize: 13 }}>{addLabel}</Link>
+        <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
+          {importButton}
+          {exportHref && <Link href={exportHref} style={{ color: "var(--muted)", fontSize: 13 }}>PDF ↗</Link>}
+          <Link href={addHref} style={{ color: "var(--accent)", fontSize: 13 }}>{addLabel}</Link>
+        </div>
       </div>
       <div style={{ background: "var(--surface)", border: "1px solid var(--border)", borderRadius: 10, overflow: "hidden" }}>
         {count > 0 ? children : (
-          <div style={{ padding: 24, textAlign: "center", color: "var(--muted)", fontSize: 13 }}>{empty}</div>
+          typeof empty === "string"
+            ? <div style={{ padding: 24, textAlign: "center", color: "var(--muted)", fontSize: 13 }}>{empty}</div>
+            : empty
         )}
       </div>
     </section>
