@@ -2,7 +2,7 @@
 // Version 1.0 — 2026-05-23
 
 import { baseUrl } from "@/app/lib/url";
-import { ContactedToggle } from "./ContactedToggle";
+import { LeadActions } from "./ContactedToggle";
 
 const BASE = baseUrl();
 
@@ -160,8 +160,17 @@ export default async function LeadsPage() {
                   </div>
                 )}
 
-                {/* Kontaktet toggle */}
-                <ContactedToggle id={lead.id} initial={lead.contacted} />
+                {/* Lead actions: email draft + kontaktet toggle */}
+                <LeadActions
+                  id={lead.id}
+                  initial={lead.contacted}
+                  email={lead.email}
+                  name={lead.name}
+                  score={lead.score}
+                  source={lead.source}
+                  category={lead.category}
+                  notes={lead.notes}
+                />
               </div>
             );
           })}
