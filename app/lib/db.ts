@@ -72,5 +72,17 @@ export async function auditLog(opts: {
       old_values: opts.oldValues ?? null,
       new_values: opts.newValues ?? null,
     }),
-  }).catch(() => {}); // audit er non-fatal
+  }).catch((err: unknown) => {
+    // audit er non-fatal — men Anne skal vide det
+    const token = process.env.TELEGRAM_BOT_TOKEN;
+    const chatId = process.env.TELEGRAM_CHAT_ID;
+    if (token && chatId) {
+      const msg = `⚠️ Decode Audit — audit write fejlede\nTabel: ${opts.table}\nHandling: ${opts.action}\nFejl: ${err instanceof Error ? err.message : String(err)}`;
+      fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ chat_id: chatId, text: msg }),
+      }).catch(() => {});
+    }
+  });
 }
