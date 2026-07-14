@@ -16,7 +16,7 @@ const FEATURES = [
   {
     icon: "⚖",
     title: "EU AI Act compliance",
-    desc: "Risikoklassificering, dokumentationskrav og løbende overvågning tilpasset jeres systemer og deadline 2. august 2026.",
+    desc: "Risikoklassificering, dokumentationskrav og løbende overvågning tilpasset jeres systemer. High-risk deadline: december 2027.",
   },
   {
     icon: "🔍",
@@ -44,7 +44,7 @@ const PROCESS = [
 
 const WHO = [
   "Teams der bruger AI i HR, rekruttering, kundeservice eller intern drift",
-  "Virksomheder med deadline på EU AI Act compliance (2. august 2026 for high-risk systemer)",
+  "Virksomheder der vil forstå hvad EU AI Act opdateringen (maj 2026) betyder for dem",
   "Organisationer der vil dokumentere AI-brug til bestyrelse, revisor eller offentlige myndigheder",
   "Tech-teams der vil have én kilde til sandhed om AI-systemernes tilstand",
 ]
@@ -52,7 +52,8 @@ const WHO = [
 export default function LandingPage() {
   const deadline = new Date("2026-08-02")
   const today = new Date()
-  const daysLeft = Math.ceil((deadline.getTime() - today.getTime()) / (1000 * 60 * 60 * 24))
+  // daysLeft fjernet 2026-05-25 — deadline rykket til december 2027, banner ændret
+  // const daysLeft = Math.ceil((deadline.getTime() - today.getTime()) / (1000 * 60 * 60 * 24))
 
   return (
     <main style={{ background: "#0f0d0c", color: "#e8e0d8", fontFamily: "'Inter', ui-sans-serif, system-ui, sans-serif", minHeight: "100vh" }}>
@@ -92,17 +93,16 @@ export default function LandingPage() {
         </div>
       </nav>
 
-      {/* ── EU AI Act deadline banner ── */}
-      {daysLeft <= 90 && (
-        <div style={{
-          background: "#1a0e08", borderBottom: "1px solid #3a2010",
-          padding: "0.6rem 2rem", textAlign: "center",
-        }}>
-          <p style={{ color: "#c87848", fontSize: "0.78rem", letterSpacing: "0.04em" }}>
-            ⚠ EU AI Act high-risk deadline: <strong>{daysLeft} dage</strong> til 2. august 2026
-          </p>
-        </div>
-      )}
+      {/* ── EU AI Act opdatering banner ── */}
+      {/* Maj 2026: Annex III high-risk deadline rykket til december 2027 — nyt hook: reglerne ændrede sig */}
+      <div style={{
+        background: "#0e1218", borderBottom: "1px solid #1a2030",
+        padding: "0.6rem 2rem", textAlign: "center",
+      }}>
+        <p style={{ color: "#6a8aaa", fontSize: "0.78rem", letterSpacing: "0.04em" }}>
+          EU AI Act opdateret maj 2026 — ny deadline for high-risk systemer: december 2027. <a href="/risikotest" style={{ color: "#c8a878", textDecoration: "none" }}>Kender I jeres risikostatus? →</a>
+        </p>
+      </div>
 
       {/* ── Hero ── */}
       <section style={{ maxWidth: 760, margin: "0 auto", padding: "5rem 2rem 4rem", textAlign: "center" }}>
@@ -263,25 +263,25 @@ export default function LandingPage() {
         </p>
         <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap", marginBottom: "1rem" }}>
           <a
-            href="/demo"
-            style={{
-              display: "inline-block",
-              background: "#1a1614", color: "#c8a878",
-              padding: "0.9rem 2rem", borderRadius: 12,
-              textDecoration: "none", fontSize: "0.95rem",
-              fontWeight: 500, border: "1px solid #2a2418",
-            }}
-          >
-            Se demo →
-          </a>
-          <a
-            href="mailto:anne@decodeai.dk?subject=Decode Audit — forespørgsel&body=Hej Anne,%0A%0AJeg er interesseret i at høre mere om Decode Audit.%0A%0AVores AI-systemer / situation:%0A%0A"
+            href="/risikotest"
             style={{
               display: "inline-block",
               background: "#c8a878", color: "#0f0d0c",
               padding: "0.9rem 2rem", borderRadius: 12,
               textDecoration: "none", fontSize: "0.95rem",
               fontWeight: 600, letterSpacing: "0.02em",
+            }}
+          >
+            Tag AI Risikotest →
+          </a>
+          <a
+            href="mailto:anne@decodeai.dk?subject=Decode Audit — forespørgsel&body=Hej Anne,%0A%0AJeg er interesseret i at høre mere om Decode Audit.%0A%0AVores AI-systemer / situation:%0A%0A"
+            style={{
+              display: "inline-block",
+              background: "#1a1614", color: "#c8a878",
+              padding: "0.9rem 2rem", borderRadius: 12,
+              textDecoration: "none", fontSize: "0.95rem",
+              fontWeight: 500, border: "1px solid #2a2418",
             }}
           >
             Skriv til Anne →

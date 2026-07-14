@@ -1,5 +1,16 @@
 import { NextRequest } from "next/server";
+import { z } from "zod";
 import { dbGet, dbPost, auditLog } from "@/app/lib/db";
+
+const CreateTestCaseSchema = z.object({
+  system_id: z.number().int().positive(),
+  title: z.string().min(1).max(500),
+  description: z.string().max(2000).optional().nullable(),
+  category: z.enum(["safety", "accuracy", "bias", "hallucination", "performance", "edge_case", "regression", "compliance"]),
+  input_data: z.string().max(5000).optional().nullable(),
+  expected_output: z.string().max(5000).optional().nullable(),
+  severity: z.number().int().min(1).max(5).optional(),
+});
 
 // GET /api/test-cases — liste med filtrering
 export async function GET(req: NextRequest) {
@@ -28,10 +39,9 @@ export async function GET(req: NextRequest) {
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    const { system_id, title, description, category, input_data, expected_output, severity } = body;
-    if (!system_id || !title || !category) {
-      return Response.json({ error: "system_id, title og category er påkrævet" }, { status: 400 });
-    }
+    const result = CreateTestCaseSchema.safeParse(body);
+    if (!result.success) return Response.json({ error: result.error.flatten() }, { status: 400 });
+    const { system_id, title, description, category, input_data, expected_output, severity } = result.data;
 
     const row = await dbPost<{ id: number } & Record<string, unknown>>("/test_cases", {
       system_id,

@@ -1,5 +1,18 @@
 import { NextRequest } from "next/server";
+import { z } from "zod";
 import { dbGet, dbPost, auditLog } from "@/app/lib/db";
+
+const CreateIncidentSchema = z.object({
+  system_id: z.number().int().positive(),
+  title: z.string().min(1).max(500),
+  description: z.string().min(1).max(5000),
+  severity: z.number().int().min(1).max(5).optional(),
+  category: z.enum(["bias", "hallucination", "safety", "accuracy", "performance", "edge_case", "regression", "compliance"]),
+  detected_by: z.string().max(200).optional(),
+  assigned_to: z.string().max(200).optional(),
+  test_case_id: z.number().int().positive().optional().nullable(),
+  impact: z.string().max(2000).optional().nullable(),
+});
 
 // GET /api/incidents — list med filtrering
 export async function GET(req: NextRequest) {
@@ -31,10 +44,9 @@ export async function GET(req: NextRequest) {
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    const { system_id, title, description, severity, category, detected_by, assigned_to, test_case_id, impact } = body;
-    if (!system_id || !title || !description || !category) {
-      return Response.json({ error: "system_id, title, description og category er påkrævet" }, { status: 400 });
-    }
+    const result = CreateIncidentSchema.safeParse(body);
+    if (!result.success) return Response.json({ error: result.error.flatten() }, { status: 400 });
+    const { system_id, title, description, severity, category, detected_by, assigned_to, test_case_id, impact } = result.data;
 
     const incident = await dbPost<{ id: number } & Record<string, unknown>>("/incidents", {
       system_id, title, description,

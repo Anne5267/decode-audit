@@ -72,5 +72,21 @@ export async function auditLog(opts: {
       old_values: opts.oldValues ?? null,
       new_values: opts.newValues ?? null,
     }),
-  }).catch(() => {}); // audit er non-fatal
+  }).catch(() => {
+    // audit er non-fatal — men vi vil gerne vide om det fejler
+    if (!process.env.RESEND_API_KEY) return;
+    fetch("https://api.resend.com/emails", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${process.env.RESEND_API_KEY}`,
+      },
+      body: JSON.stringify({
+        from: "Decode Audit <audit@decodeai.dk>",
+        to: ["anne@decodeai.dk"],
+        subject: `Audit write fejlede — ${opts.table}`,
+        html: `<p>En audit-log write fejlede.</p><p><strong>Tabel:</strong> ${opts.table}<br><strong>Record:</strong> ${opts.recordId}<br><strong>Action:</strong> ${opts.action}</p>`,
+      }),
+    }).catch(() => {});
+  });
 }

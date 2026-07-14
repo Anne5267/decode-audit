@@ -89,9 +89,35 @@ export default async function DashboardPage() {
     );
   }
 
+  // EU AI Act deadline
+  const deadline  = new Date("2026-08-02");
+  const today     = new Date();
+  const daysLeft  = Math.ceil((deadline.getTime() - today.getTime()) / (1000 * 60 * 60 * 24));
+  const isUrgent  = daysLeft <= 90;
+
   return (
     <div>
-      <h1 style={{ fontSize: 22, fontWeight: 700, marginBottom: 28 }}>Dashboard</h1>
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 28 }}>
+        <h1 style={{ fontSize: 22, fontWeight: 700 }}>Dashboard</h1>
+        <Link href="/compliance/overview" style={{
+          display: "flex",
+          alignItems: "center",
+          gap: 8,
+          padding: "6px 14px",
+          background: isUrgent ? "rgba(248,113,113,0.06)" : "rgba(251,191,36,0.05)",
+          border: `1px solid ${isUrgent ? "rgba(248,113,113,0.22)" : "rgba(251,191,36,0.18)"}`,
+          borderRadius: 8,
+          fontSize: 12,
+          color: isUrgent ? "var(--not_met)" : "var(--partial)",
+          textDecoration: "none",
+        }}>
+          <span style={{ fontWeight: 600 }}>EU AI Act</span>
+          <span style={{ opacity: 0.7 }}>
+            {daysLeft > 0 ? `${daysLeft} dage til deadline` : "Deadline overskredet"}
+          </span>
+          <span style={{ opacity: 0.5 }}>→</span>
+        </Link>
+      </div>
 
       <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 16, marginBottom: 40 }}>
         <StatCard label="AI Systemer" value={data.systems.total} />

@@ -147,6 +147,7 @@ SUPABASE_SERVICE_ROLE_KEY=your-service-role-key
 
 ```bash
 npm run dev   # http://localhost:3000
+npm test      # run vitest (14 tests, no network required)
 ```
 
 ---

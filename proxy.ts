@@ -12,7 +12,7 @@ export function proxy(req: NextRequest) {
   }
 
   // Offentlige sider — ingen auth krævet
-  if (pathname === "/login" || pathname === "/landing" || pathname === "/demo") return NextResponse.next();
+  if (pathname === "/login" || pathname === "/landing" || pathname === "/demo" || pathname.startsWith("/risikotest")) return NextResponse.next();
 
   // Alt andet: kræver gyldig session cookie
   const cookie = req.cookies.get(COOKIE)?.value;
